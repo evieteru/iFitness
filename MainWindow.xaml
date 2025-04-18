@@ -1,0 +1,94 @@
+﻿<Window x:Class="iFitness.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="iFitness" Height="600" Width="900">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+
+        <!-- Calendar -->
+        <Calendar x:Name="WorkoutCalendar"
+                  Grid.Row="0" Grid.Column="0"
+                  SelectedDatesChanged="WorkoutCalendar_SelectedDatesChanged" />
+
+        <!-- Today Section -->
+        <StackPanel Grid.Row="0" Grid.Column="1" Margin="20">
+            <TextBlock Text="Today:" FontWeight="Bold" FontSize="18"/>
+            <TextBlock Text="Planned workout:" Margin="0,10,0,0"/>
+            <TextBlock Text="Title: " x:Name="WorkoutTitleText"/>
+            <TextBlock Text="Completed? " x:Name="WorkoutCompletedText"/>
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <Button Content="View Details" Click="ViewDetails_Click" Margin="0,0,10,0"/>
+                <Button Content="Log" Click="LogWorkout_Click"/>
+            </StackPanel>
+            <Button Content="Add Workout" Click="AddWorkout_Click" Margin="0,10,0,0" Width="150"/>
+        </StackPanel>
+
+        <!-- This Week Label -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                   Text="This Week" FontWeight="Bold" FontSize="16" Margin="0,10,0,10"/>
+
+        <!-- Weekly View Row -->
+        <DockPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0">
+            <Button Content="←" DockPanel.Dock="Left" Width="30" Click="PreviousWeek_Click"/>
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
+                <!--Day Blocks-->
+                <UniformGrid Columns="7" Rows="1" x:Name="WeeklyGrid" Margin="10,0,10,0">
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="5">
+                        <StackPanel>
+                            <TextBlock x:Name="Day0Label" Text="Mon" HorizontalAlignment="Center" FontWeight="Bold"/> <!--Day label-->
+                            <TextBlock x:Name="Day0WorkoutText" Text="No workout" HorizontalAlignment="Center"/> <!--Workout description-->
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="5">
+                        <StackPanel>
+                            <TextBlock x:Name="Day1Label" Text="Tue" HorizontalAlignment="Center" FontWeight="Bold"/>
+                            <TextBlock x:Name="Day1WorkoutText" Text="No workout" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="5">
+                        <StackPanel>
+                            <TextBlock x:Name="Day2Label" Text="Wed" HorizontalAlignment="Center" FontWeight="Bold"/>
+                            <TextBlock x:Name="Day2WorkoutText" Text="No workout" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="5">
+                        <StackPanel>
+                            <TextBlock x:Name="Day3Label" Text="Thu" HorizontalAlignment="Center" FontWeight="Bold"/>
+                            <TextBlock x:Name="Day3WorkoutText" Text="No workout" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="5">
+                        <StackPanel>
+                            <TextBlock x:Name="Day4Label" Text="Fri" HorizontalAlignment="Center" FontWeight="Bold"/>
+                            <TextBlock x:Name="Day4WorkoutText" Text="No workout" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="5">
+                        <StackPanel>
+                            <TextBlock x:Name="Day5Label" Text="Sat" HorizontalAlignment="Center" FontWeight="Bold"/>
+                            <TextBlock x:Name="Day5WorkoutText" Text="No workout" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="5">
+                        <StackPanel>
+                            <TextBlock x:Name="Day6Label" Text="Sun" HorizontalAlignment="Center" FontWeight="Bold"/>
+                            <TextBlock x:Name="Day6WorkoutText" Text="No workout" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </UniformGrid>
+
+            </ScrollViewer>
+            <Button Content="→" DockPanel.Dock="Right" Width="30" Click="NextWeek_Click"/>
+        </DockPanel>
+
+    </Grid>
+</Window>
+
