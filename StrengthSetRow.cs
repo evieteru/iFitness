@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace iFitness
 {
-    internal class StrengthSetRow
+    //One row for a set
+    public class StrengthSetRow
     {
         public string Exercise { get; set; }
         public int Reps { get; set; }

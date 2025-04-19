@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace iFitness
 {
-    internal class StrengthWorkout : Workout
+    public class StrengthWorkout : Workout
     {
         public ObservableCollection<StrengthSet> Sets { get; set; } = new ObservableCollection<StrengthSet>();
+        public override string Summary => $"{Sets.Count} strength set(s)";
     }
 }

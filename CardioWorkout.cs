@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace iFitness
 {
-    internal class CardioWorkout : Workout
+    //One workout that can have many sets
+    public class CardioWorkout : Workout
     {
         public ObservableCollection<CardioSet> Sets { get; set; } = new ObservableCollection<CardioSet>();
+        public override string Summary => $"{Sets.Count} cardio set(s)";
     }
 }

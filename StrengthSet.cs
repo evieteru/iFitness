@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace iFitness
 {
-    internal class StrengthSet
+    //One single set (table), can have many rows
+    public class StrengthSet
     {
         public ObservableCollection<StrengthSetRow> Rows { get; set; } = new ObservableCollection<StrengthSetRow>();
+        public string SetLabel => $"{Rows.Count} exercise(s)";
     }
 }

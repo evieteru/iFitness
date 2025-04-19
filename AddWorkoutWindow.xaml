@@ -1,0 +1,51 @@
+﻿<Window x:Class="iFitness.AddWorkoutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:iFitness"
+        mc:Ignorable="d"
+        Title="AddWorkout" Height="450" Width="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Description -->
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="Description: " VerticalAlignment="Center" />
+            <TextBox x:Name="DescriptionBox" Width="400" />
+        </StackPanel>
+
+        <!-- Workout Type -->
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10" Grid.Row="1">
+            <TextBlock Text="Workout type: " VerticalAlignment="Center"/>
+            <ComboBox x:Name="WorkoutTypeComboBox" Width="150" SelectionChanged="WorkoutTypeComboBox_SelectionChanged">
+                <ComboBoxItem Content="Cardio" />
+                <ComboBoxItem Content="Strength" />
+            </ComboBox>
+        </StackPanel>
+
+        <!-- Sets List -->
+        <StackPanel Grid.Row="2">
+            <ListBox x:Name="SetList" ItemsSource="{Binding SelectedWorkout.Sets}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Set" Margin="5"/>
+                            <Button Content="Edit" Click="EditSet_Click" Tag="{Binding}" Margin="5"/>
+                            <Button Content="Delete" Click="DeleteSet_Click" Tag="{Binding}" Margin="5"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button Content="Add Set" Click="AddSet_Click" Margin="5" Width="100" HorizontalAlignment="Left"/>
+        </StackPanel>
+
+        <!-- Save Workout -->
+        <Button Grid.Row="3" Content="Save Workout" Width="150" HorizontalAlignment="Right" Click="Save_Click"/>
+    </Grid>
+</Window>

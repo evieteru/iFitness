@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace iFitness
 {
-    internal enum WorkoutType
+    public enum WorkoutType
     {
         Cardio,
         Strength

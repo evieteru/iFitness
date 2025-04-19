@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace iFitness
 {
-    internal class CardioSet
+    //One row, many of these rows will make up a set
+    public class CardioSetRow
     {
         public string Distance {  get; set; }
         public string Time {  get; set; }

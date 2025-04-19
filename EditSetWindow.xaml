@@ -6,7 +6,20 @@
         xmlns:local="clr-namespace:iFitness"
         mc:Ignorable="d"
         Title="EditSetWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Margin="10">
+        <DataGrid x:Name="RowGrid"
+                  ItemsSource="{Binding Rows}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="True" CanUserDeleteRows="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Exercise" Binding="{Binding Exercise}" Width="*" />
+                <DataGridTextColumn Header="Reps" Binding="{Binding Reps}" Width="Auto" />
+                <DataGridTextColumn Header="Weight" Binding="{Binding Weight}" Width="Auto" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!--<Button Content="Save" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,10,0,0"
+                Click="Save_Click"/>-->
+
     </Grid>
 </Window>
