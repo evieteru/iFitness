@@ -134,7 +134,8 @@ namespace iFitness
 
         private void LogWorkout_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Implementation coming soon");
+            var logWindow = new LogWorkoutWindow();
+            logWindow.ShowDialog(); // I think this just makes it pop up which idk if thats what we want yet????
         }
 
         private void PreviousWeek_Click(object sender, RoutedEventArgs e)

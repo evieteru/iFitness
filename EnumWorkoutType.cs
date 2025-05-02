@@ -9,6 +9,7 @@ namespace iFitness
     public enum WorkoutType
     {
         Cardio,
-        Strength
+        Strength,
+        MindBody
     }
 }

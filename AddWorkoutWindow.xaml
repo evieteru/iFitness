@@ -26,6 +26,7 @@
             <ComboBox x:Name="WorkoutTypeComboBox" Width="150" SelectionChanged="WorkoutTypeComboBox_SelectionChanged">
                 <ComboBoxItem Content="Cardio" />
                 <ComboBoxItem Content="Strength" />
+                <ComboBoxItem Content="Mind-Body"/>
             </ComboBox>
         </StackPanel>
 
