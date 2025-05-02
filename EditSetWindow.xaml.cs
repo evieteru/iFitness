@@ -19,24 +19,27 @@ namespace iFitness
     /// </summary>
     public partial class EditSetWindow : Window
     {
-        //private StrengthSet _strengthSet; // testing on strength first
-        //private CardioSet _cardioSet;
-        //private MindBodySet = _mindbodySet;
 
-
+        // this might not work
+        private StrengthSet _strengthSet;
+        private CardioSet _cardioSet;
+        //private MindBodySet _mindbodySet;
 
         public EditSetWindow(Object set)
         {
             InitializeComponent();
+           //_set = set;
 
-            if(set is StrengthSet strengthSet)
+            if (set is StrengthSet strengthSet)
             {
+                _strengthSet = strengthSet;
                 DataContext = strengthSet;
                 RowGrid.ItemsSource = strengthSet.Rows;
                 GenerateColumnsForStrength();
             }
             else if(set is CardioSet cardioSet)
             {
+                _cardioSet = cardioSet;
                 DataContext = cardioSet;
                 RowGrid.ItemsSource = cardioSet.Rows;
                 GenerateColumnsForCardio();
@@ -44,12 +47,47 @@ namespace iFitness
             }
             else if(set is MindBodySet mindbodySet)
             {
+                //_mindbodySet
                 DataContext = mindbodySet;
                 RowGrid.ItemsSource = mindbodySet.Rows;
                 GenerateColumnsForMindBody();
 
             }
   
+        }
+
+        private void AddRow_Click(object sender, RoutedEventArgs e)
+        {
+            if (_strengthSet != null)
+            {
+                _strengthSet.Rows.Add(new StrengthSetRow());
+            }
+            else if (_cardioSet != null)
+            {
+                _cardioSet.Rows.Add(new CardioSetRow());
+            }
+            /*else if (_mindbodySet != null)
+            {
+                _mindbodySet.Rows.Add(new MindBodySetRow());
+            }*/
+        }
+
+        private void DeleteRow_Click(object sender, RoutedEventArgs e)
+        {
+            if (RowGrid.SelectedItem == null) return;
+
+            if (_strengthSet != null && RowGrid.SelectedItem is StrengthSetRow strengthRow)
+            {
+                _strengthSet.Rows.Remove(strengthRow);
+            }
+            else if (_cardioSet != null && RowGrid.SelectedItem is CardioSetRow cardioRow) // This method is a little funky with how it deletes when testing
+            {
+                _cardioSet.Rows.Remove(cardioRow);
+            }
+           /* else if (_mindbodySet != null && RowGrid.SelectedItem is MindBodySetRow mindRow)
+            {
+                _mindbodySet.Rows.Remove(mindRow);
+            }*/
         }
 
         private void Save_Click(object sender, RoutedEventArgs e) //
@@ -98,12 +136,7 @@ namespace iFitness
         }
 
 
-        /*
-        public EditSetWindow()
-        {
-            InitializeComponent();
-        }
-        */
+
 
     }
 }
