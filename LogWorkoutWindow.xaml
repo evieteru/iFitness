@@ -52,5 +52,7 @@
                 </ComboBox>
             </StackPanel>
         </Grid>
+        <!-- Save Button -->
+        <Button Grid.Row="3" Content="Save" Width="100" Height="30" HorizontalAlignment="Right" Click="SaveButton_Click" Margin="0,10,0,0"/>
     </Grid>
 </Window>

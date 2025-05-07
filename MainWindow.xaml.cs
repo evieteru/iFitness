@@ -53,11 +53,13 @@ namespace iFitness
             {
                 WorkoutTitleText.Text = workout.Description;
                 WorkoutCompletedText.Text = workout.Summary;
+                LogWorkoutButton.IsEnabled = true; //Enable the log button if there is a workout
             }
             else
             {
                 WorkoutTitleText.Text = "No workout scheduled";
                 WorkoutCompletedText.Text = "";
+                LogWorkoutButton.IsEnabled = false;
             }
         }
 
@@ -134,8 +136,22 @@ namespace iFitness
 
         private void LogWorkout_Click(object sender, RoutedEventArgs e)
         {
-            var logWindow = new LogWorkoutWindow();
-            logWindow.ShowDialog(); // I think this just makes it pop up which idk if thats what we want yet????
+            DateTime selectedDate = WorkoutCalendar.SelectedDate ?? DateTime.Today; // if no date selected default to today
+
+            //Check if there is a workout for the selected date
+            if (workoutByDate.TryGetValue(selectedDate.Date, out var workout))
+            {
+                var logWindow = new LogWorkoutWindow(workout); //pass the workout to log workout
+                if (logWindow.ShowDialog() == true)
+                {
+                    // After saving, refresh
+                    UpdateTodayPanel();
+                }
+            }
+            else
+            {
+                MessageBox.Show("No workout to log for this day.");
+            }
         }
 
         private void PreviousWeek_Click(object sender, RoutedEventArgs e)

@@ -13,5 +13,8 @@ namespace iFitness
         public DateTime Date { get; set; } //Date of workoout
         public abstract string Summary {  get; } //User review of their performance, completion
 
+        public string Status { get; set; } // "Completed", "Did not finish", "Did not start"
+        public string Notes { get; set; } // User's notes
+        public int? Difficulty { get; set; } // Difficulty rating (nullable int, 1-10)
     }
 }
