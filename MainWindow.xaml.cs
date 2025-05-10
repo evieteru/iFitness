@@ -45,8 +45,13 @@ namespace iFitness
         {
             UpdateTodayPanel();
             UpdateWeeklyView();
+            UpdateWeeklyReport();
         }
 
+
+
+
+        //Update UI ===============================================================================================================================================================
         private void UpdateTodayPanel()
         {
             DateTime selectedDate = WorkoutCalendar.SelectedDate ?? DateTime.Today; //selectedDate is date selected on calendar, if none selected, then it's today
@@ -115,6 +120,92 @@ namespace iFitness
 
         }
 
+        //Update the weekly report
+        private void UpdateWeeklyReport()
+        {
+            DateTime baseDate = WorkoutCalendar.SelectedDate ?? DateTime.Today;
+            int diff = (int)DayOfWeek.Monday - (int)baseDate.DayOfWeek;
+            if (diff > 0) diff -= 7; // Ensure Monday is the start, even if baseDate is Sunday
+            DateTime monday = baseDate.AddDays(diff).Date;
+            DateTime sunday = monday.AddDays(6).Date;
+
+            // Date Range
+            WeeklyReportDateRangeText.Text = $"Week: {monday:MMM d} - {sunday:MMM d, yyyy}";
+
+            List<Workout> workoutsThisWeek = new List<Workout>();
+            for (int i = 0; i < 7; i++)
+            {
+                if (workoutByDate.TryGetValue(monday.AddDays(i), out var workout))
+                {
+                    workoutsThisWeek.Add(workout);
+                }
+            }
+
+            // Days with Workouts
+            int daysWithWorkoutsCount = workoutsThisWeek.Select(w => w.Date.Date).Distinct().Count();
+            WeeklyReportDaysWithWorkoutsText.Text = $"Active Days: {daysWithWorkoutsCount}/7";
+
+            // Completion Rate
+            int scheduledWorkoutsCount = workoutsThisWeek.Count;
+            int completedWorkoutsCount = workoutsThisWeek.Count(w => "Completed".Equals(w.Status, StringComparison.OrdinalIgnoreCase));
+            double completionRate = 0;
+            if (scheduledWorkoutsCount > 0)
+            {
+                completionRate = ((double)completedWorkoutsCount / scheduledWorkoutsCount) * 100;
+            }
+            WeeklyReportCompletionRateText.Text = $"Completion: {completionRate:F0}% ({completedWorkoutsCount}/{scheduledWorkoutsCount})";
+
+            // Weekly Grade
+            int score = 0;
+            if (scheduledWorkoutsCount > 0) // Only calculate grade if workouts were scheduled
+            {
+                bool hasCardio = workoutsThisWeek.Any(w => w.Type == WorkoutType.Cardio);
+                bool hasStrength = workoutsThisWeek.Any(w => w.Type == WorkoutType.Strength);
+
+                // Variety Bonus
+                if (hasCardio && hasStrength)
+                {
+                    score += 1;
+                }
+
+                // Completion Bonus (Volume)
+                score += Math.Min(completedWorkoutsCount, 6);
+
+                // Perfection Bonus
+                if (completionRate == 100.0 && scheduledWorkoutsCount > 0) // Ensure it's truly 100% of scheduled
+                {
+                    score += 1;
+                }
+                score = Math.Min(score, 8); // Cap score at 8
+            }
+
+            string letterGrade = GetLetterGrade(score, scheduledWorkoutsCount > 0);
+            WeeklyReportGradeText.Text = $"Grade: {letterGrade}";
+        }
+
+
+        // Get corresponding grade for calculated weekly score
+        private string GetLetterGrade(int score, bool workoutsScheduled)
+        {
+            if (!workoutsScheduled) return "N/A (No Workouts)";
+
+            return score switch
+            {
+                8 => "A",
+                7 => "B+",
+                6 => "B",
+                5 => "B-",
+                4 => "C+",
+                3 => "C",
+                2 => "C-",
+                1 => "D",
+                _ => "F", // Covers 0 and any unexpected lower values
+            };
+        }
+
+
+
+        //Buttons==========================================================================================================================================
         private void AddWorkout_Click(object sender, RoutedEventArgs e)
         {
             var addWindow = new AddWorkoutWindow();
@@ -230,6 +321,29 @@ namespace iFitness
             }
         }
 
+        private void ViewProgressButton_Click(object sender, RoutedEventArgs e)
+        {
+            //This is a display window, so pass a copy
+            //We don't want the workouts to be modified fron ProgressChccker
+            var allWorkoutsCopy = workoutByDate.Values.ToList();
+
+            ProgressCheckerWindow progressWindow = new ProgressCheckerWindow(allWorkoutsCopy);
+            progressWindow.Owner = this; // Optional: Sets the owner of the new window
+            progressWindow.Show(); // Use Show() for a non-modal window, or ShowDialog() for a modal one
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        //Calendar Navigation ==========================================================================================================================
         private void PreviousWeek_Click(object sender, RoutedEventArgs e)
         {
             WorkoutCalendar.SelectedDate = WorkoutCalendar.SelectedDate?.AddDays(-7); //Currently selected date and subtract 7 days
