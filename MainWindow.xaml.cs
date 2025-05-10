@@ -374,10 +374,12 @@ namespace iFitness
                 return; //Exit the method since there's nothing to load
             }
 
+            // If the file exists, try to read and deserialize it
             try
             {
                 string json = File.ReadAllText(path);
 
+                // Deserialize the JSON into a list of JsonElement
                 var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
@@ -392,12 +394,9 @@ namespace iFitness
                     var type = element.GetProperty("Type").GetString();
 
                     Workout workout = type switch
-                    {
-                        "Cardio" => element.Deserialize<CardioWorkout>(options),
-                        "Strength" => element.Deserialize<StrengthWorkout>(options),
-                        // ...
-                        _ => null
-                    };
+                    {"Cardio" => element.Deserialize<CardioWorkout>(options),
+                     "Strength" => element.Deserialize<StrengthWorkout>(options),
+                        _=> null};
 
                     // Set the date and add to the dictionary
                     if (workout != null)
