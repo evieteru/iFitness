@@ -175,7 +175,7 @@ namespace iFitness
 
             if (canvasHeight <= 20 || canvasWidth <= 50 || !monthlyData.Any()) // Basic check for drawable area and data
             {
-                TextBlock noDataMsg = new TextBlock { Text = !monthlyData.Any() && YearComboBox.SelectedItem != null ? "No completed workouts for this year." : "Graph area too small or no data.", Foreground = Brushes.DarkGray };
+                TextBlock noDataMsg = new TextBlock { Text = !monthlyData.Any() && YearComboBox.SelectedItem != null ? "No completed workouts for this year." : "Graph area too small or no data. Try sorting data!", Foreground = Brushes.DarkGray };
                 GraphCanvas.Children.Add(noDataMsg);
                 Canvas.SetLeft(noDataMsg, 10);
                 Canvas.SetTop(noDataMsg, 10);
@@ -210,8 +210,8 @@ namespace iFitness
                 if (val > maxCount) yPos = XaxisYPosition - (XaxisYPosition - 20); // Cap at maxCount drawing position
                 if (yPos < 10) yPos = 10;
 
-
-                Canvas.SetTop(yLabel, yPos - (yLabel.FontSize / 2)); // Center vertically
+                // Set position for Y-axis label
+                Canvas.SetTop(yLabel, yPos - (yLabel.FontSize / 2)); 
                 Canvas.SetLeft(yLabel, 0);
                 GraphCanvas.Children.Add(yLabel);
             }
@@ -231,13 +231,13 @@ namespace iFitness
 
                 Rectangle bar = new Rectangle
                 {
-                    Width = Math.Max(5, barWidth * 0.7), // Ensure bar has some width, 70% of available slot
+                    Width = Math.Max(5, barWidth * 0.7), //Ensure bar has some width, 70% of available slot
                     Height = barHeight,
                     Fill = Brushes.SteelBlue,
                     ToolTip = $"{monthNames[month - 1]}: {count} completed"
                 };
 
-                double xPos = YaxisXPosition + (month - 1) * barWidth + (barWidth * 0.15); // Center bar in its slot
+                double xPos = YaxisXPosition + (month - 1) * barWidth + (barWidth * 0.15); // Center the bar in it's slot
                 Canvas.SetLeft(bar, xPos);
                 Canvas.SetTop(bar, XaxisYPosition - barHeight);
                 GraphCanvas.Children.Add(bar);

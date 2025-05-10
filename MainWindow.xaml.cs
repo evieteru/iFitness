@@ -415,7 +415,7 @@ namespace iFitness
         // Save the workouts to a JSON file when the application closes or when a workout is added/modified
         private void SaveWorkoutsToJson()
         {
-            string path = "sample_workouts.json"; //
+            string path = "sample_workouts.json"; 
             try
             {
                 // Convert the dictionary values to a list of Workout objects
@@ -429,7 +429,7 @@ namespace iFitness
                 };
 
                 string json = JsonSerializer.Serialize<List<Workout>>(workoutsToSave, options);
-                File.WriteAllText(path, json); //
+                File.WriteAllText(path, json); 
             }
             catch (Exception ex)
             {
