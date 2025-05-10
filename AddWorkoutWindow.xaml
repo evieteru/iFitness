@@ -36,7 +36,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Set" Margin="5"/>
+                            <TextBlock Text="{Binding SetLabel}" Margin="5"/>
                             <Button Content="Edit" Click="EditSet_Click" Tag="{Binding}" Margin="5"/>
                             <Button Content="Delete" Click="DeleteSet_Click" Tag="{Binding}" Margin="5"/>
                         </StackPanel>

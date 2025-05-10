@@ -21,19 +21,31 @@
             <!-- Name Row -->
             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                 <TextBlock Text="Name:" VerticalAlignment="Center" FontSize="16" Margin="0,0,10,0"/>
-                <TextBox x:Name="SetNameTextBox" Width="300" Height="25" FontSize="14"/>
+                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="300" Height="25" FontSize="14"/>
             </StackPanel>
 
             <!-- Set Reps Row -->
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Set Reps:" VerticalAlignment="Center" FontSize="16" Margin="0,0,10,0"/>
-                <ComboBox x:Name="RepsComboBox" Width="100" Height="25" FontSize="14">
-                    <!-- I am not sure what values you want here going based on visual example -->
+                <ComboBox x:Name="RepsComboBox" Width="100" Height="25" FontSize="14"
+                          SelectedValue="{Binding SetReps, Mode=TwoWay}"
+                          SelectedValuePath="Content">
+                    <!-- Set Reps 1-15 -->
+                    <ComboBoxItem Content="1" />
+                    <ComboBoxItem Content="2" />
+                    <ComboBoxItem Content="3" />
+                    <ComboBoxItem Content="4" />
                     <ComboBoxItem Content="5" />
+                    <ComboBoxItem Content="6" />
+                    <ComboBoxItem Content="7" />
+                    <ComboBoxItem Content="8" />
+                    <ComboBoxItem Content="9" />
                     <ComboBoxItem Content="10" />
+                    <ComboBoxItem Content="11" />
                     <ComboBoxItem Content="12" />
+                    <ComboBoxItem Content="13" />
+                    <ComboBoxItem Content="14" />
                     <ComboBoxItem Content="15" />
-                    <ComboBoxItem Content="20" />
                 </ComboBox>
             </StackPanel>
         </StackPanel>

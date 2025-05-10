@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,6 +9,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.IO;
+using System.Diagnostics;
 
 namespace iFitness
 {
@@ -20,6 +25,14 @@ namespace iFitness
         public MainWindow()
         {
             InitializeComponent();
+            LoadWorkoutsFromJson();
+            MessageBox.Show($"Loaded {workoutByDate.Count} workouts");
+            foreach (var kvp in workoutByDate)
+            {
+                Debug.WriteLine($"{kvp.Key:d}: {kvp.Value.Description} ({kvp.Value.Type})");
+            }
+
+
             WorkoutCalendar.SelectedDate = DateTime.Today;
             UpdateTodayPanel();
             UpdateWeeklyView();
@@ -115,8 +128,36 @@ namespace iFitness
                     workoutByDate[workout.Date] = workout; //add to dictionary
                     UpdateTodayPanel();
                     UpdateWeeklyView();
+                    SaveWorkoutsToJson();
                 }
 
+            }
+        }
+
+        private void DeleteWorkout_Click(object sender, RoutedEventArgs e) // This is a new example method
+        {
+            DateTime selectedDate = WorkoutCalendar.SelectedDate ?? DateTime.Today;
+            if (workoutByDate.ContainsKey(selectedDate.Date))
+            {
+                var workoutDescription = workoutByDate[selectedDate.Date].Description;
+                var result = MessageBox.Show(
+                    $"Are you sure you want to delete the workout \"{workoutDescription}\" for {selectedDate:d}?",
+                    "Confirm Deletion",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    workoutByDate.Remove(selectedDate.Date);
+                    UpdateTodayPanel();
+                    UpdateWeeklyView();
+                    SaveWorkoutsToJson();
+                    MessageBox.Show("Workout deleted.", "Success");
+                }
+            }
+            else
+            {
+                MessageBox.Show("No workout scheduled on this date to delete.", "Deletion Failed");
             }
         }
 
@@ -124,9 +165,42 @@ namespace iFitness
         {
             DateTime selectedDate = WorkoutCalendar.SelectedDate ?? DateTime.Today;
 
-            if(workoutByDate.TryGetValue(selectedDate.Date, out var workout))
+            if (workoutByDate.TryGetValue(selectedDate.Date, out var workout))
             {
-                MessageBox.Show($"Workout Details:\n\n{workout.Description}\n{workout.Summary}", "Workout Info");
+                var sb = new StringBuilder();
+
+                sb.AppendLine($"Workout: {workout.Description}");
+                sb.AppendLine($"Type: {workout.Type}");
+                sb.AppendLine($"Summary: {workout.Summary}");
+                sb.AppendLine();
+
+                // Show sets and rows depending on type
+                if (workout is CardioWorkout cardio)
+                {
+                    int setIndex = 1;
+                    foreach (var set in cardio.Sets)
+                    {
+                        sb.AppendLine($"Set {setIndex++}: {set.Name} (Reps: {set.SetReps})");
+                        foreach (var row in set.Rows)
+                        {
+                            sb.AppendLine($"  - {row.Distance}, {row.Time}, {row.Note}");
+                        }
+                    }
+                }
+                else if (workout is StrengthWorkout strength)
+                {
+                    int setIndex = 1;
+                    foreach (var set in strength.Sets)
+                    {
+                        sb.AppendLine($"Set {setIndex++}: {set.Name} (Reps: {set.SetReps})");
+                        foreach (var row in set.Rows)
+                        {
+                            sb.AppendLine($"  - {row.Exercise}, {row.Reps} reps, {row.Weight}");
+                        }
+                    }
+                }
+  
+                MessageBox.Show(sb.ToString(), "Workout Info");
             }
             else
             {
@@ -146,6 +220,7 @@ namespace iFitness
                 {
                     // After saving, refresh
                     UpdateTodayPanel();
+                    SaveWorkoutsToJson();
                 }
             }
             else
@@ -165,6 +240,78 @@ namespace iFitness
             WorkoutCalendar.SelectedDate = WorkoutCalendar.SelectedDate?.AddDays(7);
             UpdateWeeklyView();
         }
+
+
+
+        //JSON File ==========================================================================================================================================
+
+
+        private void LoadWorkoutsFromJson()
+        {
+            string path = "sample_workouts.json";
+            if (!File.Exists(path)) return;
+
+            try
+            {
+                string json = File.ReadAllText(path);
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    Converters = { new JsonStringEnumConverter() }
+                };
+
+                var rawWorkouts = JsonSerializer.Deserialize<List<JsonElement>>(json, options);
+
+                foreach (var element in rawWorkouts)
+                {
+                    var type = element.GetProperty("Type").GetString();
+
+                    Workout workout = type switch
+                    {
+                        "Cardio" => element.Deserialize<CardioWorkout>(options),
+                        "Strength" => element.Deserialize<StrengthWorkout>(options),
+                        // ...
+                        _ => null
+                    };
+
+                    if (workout != null)
+                    {
+                        workoutByDate[workout.Date.Date] = workout;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to load workouts: {ex.Message}", "Load Error");
+            }
+        }
+
+        private void SaveWorkoutsToJson()
+        {
+            string path = "sample_workouts.json"; //
+            try
+            {
+                // Convert the dictionary values to a list of Workout objects
+                List<Workout> workoutsToSave = workoutByDate.Values.ToList();
+
+                /*Handles WorkoutType enum serialization                */
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true, // Makes the JSON file human-readable
+                    Converters = { new JsonStringEnumConverter() },
+                };
+
+                string json = JsonSerializer.Serialize<List<Workout>>(workoutsToSave, options);
+                File.WriteAllText(path, json); //
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to save workouts: {ex.Message}", "Save Error");
+            }
+        }
+
+
 
     }
 }
