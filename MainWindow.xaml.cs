@@ -26,7 +26,7 @@ namespace iFitness
         {
             InitializeComponent();
             LoadWorkoutsFromJson();
-            MessageBox.Show($"Loaded {workoutByDate.Count} workouts");
+            //Debug print for developers/graders
             foreach (var kvp in workoutByDate)
             {
                 Debug.WriteLine($"{kvp.Key:d}: {kvp.Value.Description} ({kvp.Value.Type})");
@@ -220,6 +220,7 @@ namespace iFitness
                 {
                     // After saving, refresh
                     UpdateTodayPanel();
+                    UpdateWeeklyView();
                     SaveWorkoutsToJson();
                 }
             }
@@ -245,11 +246,19 @@ namespace iFitness
 
         //JSON File ==========================================================================================================================================
 
-
+        //Load the workouts from a JSON file when the application starts
         private void LoadWorkoutsFromJson()
         {
-            string path = "sample_workouts.json";
-            if (!File.Exists(path)) return;
+            string path = "sample_workouts.json"; // Path to the JSON file
+            if (!File.Exists(path)) // Check if the file exists
+            {
+                // If the file doesn't exist, show a MessageBox
+                MessageBox.Show($"Workout data file not found: {path}.",
+                                "File Not Found",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information);
+                return; //Exit the method since there's nothing to load
+            }
 
             try
             {
@@ -263,6 +272,7 @@ namespace iFitness
 
                 var rawWorkouts = JsonSerializer.Deserialize<List<JsonElement>>(json, options);
 
+                // Deserialize each workout based on its type
                 foreach (var element in rawWorkouts)
                 {
                     var type = element.GetProperty("Type").GetString();
@@ -275,6 +285,7 @@ namespace iFitness
                         _ => null
                     };
 
+                    // Set the date and add to the dictionary
                     if (workout != null)
                     {
                         workoutByDate[workout.Date.Date] = workout;
@@ -287,6 +298,7 @@ namespace iFitness
             }
         }
 
+        // Save the workouts to a JSON file when the application closes or when a workout is added/modified
         private void SaveWorkoutsToJson()
         {
             string path = "sample_workouts.json"; //
