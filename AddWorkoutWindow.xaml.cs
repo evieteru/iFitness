@@ -28,7 +28,7 @@ namespace iFitness
         //Instances of each workout type (make both so you can switch)
         private CardioWorkout _cardioWorkout = new CardioWorkout { Type = WorkoutType.Cardio };
         private StrengthWorkout _strengthWorkout = new StrengthWorkout { Type = WorkoutType.Strength };
-        private MindBodyWorkout _mindbodyWorkout = new MindBodyWorkout { Type = WorkoutType.MindBody };
+        //private MindBodyWorkout _mindbodyWorkout = new MindBodyWorkout { Type = WorkoutType.MindBody };
 
         //returns the currently selected workout based on dropdown
         private Workout SelectedWorkout => WorkoutTypeComboBox.SelectedIndex == 0 ? _cardioWorkout : _strengthWorkout;
@@ -58,10 +58,6 @@ namespace iFitness
             else if (selected == "Strength")
             {
                 SetList.ItemsSource = _strengthWorkout.Sets;
-            }
-            else if(selected == "Mind-Body")
-            {
-                SetList.ItemsSource= _mindbodyWorkout.Sets;
             }
         }
 
@@ -93,16 +89,6 @@ namespace iFitness
                     }
                 });
             }
-            else if (selected == "Mind-Body")
-            {
-                _mindbodyWorkout.Sets.Add(new MindBodySet
-                {
-                    Rows = new ObservableCollection<MindBodySetRow>
-                    {
-                        new MindBodySetRow {Exercise = "Stretching", Time = "0 mins", Note =""}
-                    }
-                });
-            }
 
             SetList.Items.Refresh(); //update display
         }
@@ -125,11 +111,6 @@ namespace iFitness
             {
                 var editor = new EditSetWindow(cardioSet);
                 if (editor.ShowDialog() == true) SetList.Items.Refresh();
-            }
-            else if (set is MindBodySet mindbodySet)
-            {
-                MessageBox.Show("mindbody editing coming soon.");
-
             }
 
             SetList.Items.Refresh();
@@ -163,10 +144,6 @@ namespace iFitness
             {
                 _cardioWorkout.Sets.Remove(cardioSet);
             }
-            else if (set is MindBodySet mindBodySet)
-            {
-                _mindbodyWorkout.Sets.Remove(mindBodySet);
-            }
 
             SetList.Items.Refresh();
         }
@@ -193,11 +170,6 @@ namespace iFitness
             {
                 _strengthWorkout.Description = description;
                 WorkoutResult = _strengthWorkout;
-            }
-            else if(selected == "Mind-Body")
-            {
-                _mindbodyWorkout.Description = description;
-                WorkoutResult = _mindbodyWorkout;
             }
 
             DialogResult = true; //signals that user successfully saved (rather than cancel or close)

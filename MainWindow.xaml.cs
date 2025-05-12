@@ -13,6 +13,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.IO;
 using System.Diagnostics;
+using System.Net.Mail;
+using System.Net;
 
 namespace iFitness
 {
@@ -435,6 +437,108 @@ namespace iFitness
                 MessageBox.Show($"Failed to save workouts: {ex.Message}", "Save Error");
             }
         }
+
+
+
+
+
+        // SCHEDULE REMINDER ===================================================================================
+
+
+        /* simulate email -> doesn't actually send email just simulates it when running
+        private void SendReminderButton_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime selectedDate = WorkoutCalendar.SelectedDate ?? DateTime.Today;
+            if (!workoutByDate.TryGetValue(selectedDate, out var workout))
+            {
+                MessageBox.Show("No workout scheduled for this date.");
+                return;
+            }
+
+            var reminderDialog = new ReminderWindow();
+            if (reminderDialog.ShowDialog() == true)
+            {
+                string email = reminderDialog.Email;
+                TimeSpan time = reminderDialog.ReminderTime;
+                DateTime sendTime = selectedDate.Date + time;
+
+                // Simulate sending email -> to implement this requires api google binding (which idk if we want to do)
+                MessageBox.Show($"Reminder will be sent to {email} on {sendTime:g} for workout: {workout.Description}");
+
+            }
+        }
+        */
+
+        private async void SendReminderButton_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime selectedDate = WorkoutCalendar.SelectedDate ?? DateTime.Today;
+            if (!workoutByDate.TryGetValue(selectedDate, out var workout))
+            {
+                MessageBox.Show("No workout scheduled for this date.");
+                return;
+            }
+
+            var reminderDialog = new ReminderWindow();
+            if (reminderDialog.ShowDialog() == true)
+            {
+                string email = reminderDialog.Email;
+                TimeSpan time = reminderDialog.ReminderTime;
+                DateTime sendTime = selectedDate.Date + time;
+
+                TimeSpan delay = sendTime - DateTime.Now;
+
+                if (delay <= TimeSpan.Zero)
+                {
+                    MessageBox.Show("Scheduled time is in the past. Please choose a future time.");
+                    return;
+                }
+
+                MessageBox.Show($"Reminder scheduled. It will be sent to {email} at {sendTime:g}");
+
+                _ = Task.Run(async () =>
+                {
+                    await Task.Delay(delay);
+                    try
+                    {
+                        SendEmail(email, "iFitness Workout Reminder",
+                            $"Reminder: You have a workout scheduled on {sendTime:g}.\n\nDetails:\n{workout.Description}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            MessageBox.Show($"Failed to send email: {ex.Message}");
+                        });
+                    }
+                });
+            }
+        }
+
+
+        private void SendEmail(string toEmail, string subject, string body)
+        {
+            var fromEmail = "21ang.amaro@gmail.com";
+            var fromPassword = "pgbo xxcr uhbk lsyb"; // Use app password provided in Google account, 2FA has to be enabled for it to work
+
+            var smtpClient = new SmtpClient("smtp.gmail.com")
+            {
+                Port = 587,
+                Credentials = new NetworkCredential(fromEmail, fromPassword),
+                EnableSsl = true,
+            };
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(fromEmail),
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = false,
+            };
+
+            mailMessage.To.Add(toEmail);
+            smtpClient.Send(mailMessage);
+        }
+
 
 
 

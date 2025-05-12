@@ -26,7 +26,7 @@ namespace iFitness
         // this might not work
         private StrengthSet _strengthSet;
         private CardioSet _cardioSet;
-        //private MindBodySet _mindbodySet;
+        
 
         public EditSetWindow(Object set)
         {
@@ -48,14 +48,6 @@ namespace iFitness
                 GenerateColumnsForCardio();
 
             }
-            else if(set is MindBodySet mindbodySet)
-            {
-                //_mindbodySet
-                DataContext = mindbodySet;
-                RowGrid.ItemsSource = mindbodySet.Rows;
-                GenerateColumnsForMindBody();
-
-            }
   
         }
 
@@ -69,10 +61,6 @@ namespace iFitness
             {
                 _cardioSet.Rows.Add(new CardioSetRow());
             }
-            /*else if (_mindbodySet != null)
-            {
-                _mindbodySet.Rows.Add(new MindBodySetRow());
-            }*/
         }
 
         private void DeleteRow_Click(object sender, RoutedEventArgs e)
@@ -87,10 +75,7 @@ namespace iFitness
             {
                 _cardioSet.Rows.Remove(cardioRow);
             }
-           /* else if (_mindbodySet != null && RowGrid.SelectedItem is MindBodySetRow mindRow)
-            {
-                _mindbodySet.Rows.Remove(mindRow);
-            }*/
+
         }
 
         private void Save_Click(object sender, RoutedEventArgs e) //
@@ -124,20 +109,6 @@ namespace iFitness
             RowGrid.Columns.Add(new DataGridTextColumn { Header = "Time", Binding = new Binding("Time") });
             RowGrid.Columns.Add(new DataGridTextColumn { Header = "Note", Binding = new Binding("Note") });
         }
-
-        private void GenerateColumnsForMindBody()
-        {
-            RowGrid.Columns.Clear();
-            RowGrid.Columns.Add(new DataGridTextColumn { Header = "Exercise", Binding = new Binding("Exercise") });
-            RowGrid.Columns.Add(new DataGridTextColumn { Header = "Time", Binding = new Binding("Time") });
-            RowGrid.Columns.Add(new DataGridTextColumn { Header = "Note", Binding = new Binding("Note") });
-        }
-
-        private void RowGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
 
 
 

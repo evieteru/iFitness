@@ -57,21 +57,25 @@
                   CanUserAddRows="True" 
                   CanUserDeleteRows="True"  
                   Margin="0,46,0,10"
-                  SelectionChanged="RowGrid_SelectionChanged" HorizontalAlignment="Center" Width="700" />
+                  HorizontalAlignment="Center" Width="700" />
 
-        <!-- Buttons -->
-        <StackPanel Orientation="Vertical" Grid.Row="2" HorizontalAlignment="Right">
-            <!-- Add/Delete Row Buttons -->
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10" Width="778">
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Add/Delete Row Buttons on the Left -->
+            <StackPanel Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Left" Margin="0,0,0,10">
                 <Button Content="Add Row" Width="100" Margin="0,0,10,0" Click="AddRow_Click" Height="30"/>
                 <Button Content="Delete Row" Width="100" Click="DeleteRow_Click" Height="30"/>
             </StackPanel>
 
-            <!-- Save/Delete Set Buttons -->
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Delete Set" Width="100" Click="Cancel_Click" Height="30"/>
-                <Button Content="Save" Width="100" Click="Save_Click" Height="30" HorizontalAlignment="Right"/>
+            <!-- Save/Delete Set Buttons on the Right -->
+            <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
+                <Button Content="Cancel" Width="100" Click="Cancel_Click" Height="30" Margin="0,0,10,0"/>
+                <Button Content="Save" Width="100" Click="Save_Click" Height="30"/>
             </StackPanel>
-        </StackPanel>
+        </Grid>
     </Grid>
 </Window>
