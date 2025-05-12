@@ -1,0 +1,74 @@
+[
+  {
+    "Description": "5k Run",
+    "Type": "Cardio",
+    "Date": "2025-05-01T00:00:00",
+    "Summary": "0 cardio set(s)",
+    "Status": "Completed",
+    "Notes": "Felt good, steady pace.",
+    "Difficulty": 7
+  },
+  {
+    "Description": "Hill Intervals",
+    "Type": "Cardio",
+    "Date": "2025-05-03T00:00:00",
+    "Summary": "0 cardio set(s)",
+    "Status": "Did not finish",
+    "Notes": "Ran out of time, only did 2 intervals.",
+    "Difficulty": 8
+  },
+  {
+    "Description": "Upper Body Strength",
+    "Type": "Strength",
+    "Date": "2025-05-05T00:00:00",
+    "Summary": "0 strength set(s)",
+    "Status": "Completed",
+    "Notes": "Good pump. Increased weight on bench.",
+    "Difficulty": 6
+  },
+  {
+    "Description": "Tempo Run",
+    "Type": "Cardio",
+    "Date": "2025-05-21T00:00:00",
+    "Summary": "0 cardio set(s)",
+    "Status": null,
+    "Notes": null,
+    "Difficulty": null
+  },
+  {
+    "Description": "Leg Day",
+    "Type": "Strength",
+    "Date": "2025-05-23T00:00:00",
+    "Summary": "0 strength set(s)",
+    "Status": "Did not start",
+    "Notes": "Feeling under the weather.",
+    "Difficulty": null
+  },
+  {
+    "Description": "Recovery Walk",
+    "Type": "Cardio",
+    "Date": "2025-05-25T00:00:00",
+    "Summary": "0 cardio set(s)",
+    "Status": "Completed",
+    "Notes": "Easy 30 minutes.",
+    "Difficulty": 2
+  },
+  {
+    "Description": "Tempo Run",
+    "Type": "Cardio",
+    "Date": "2025-05-07T00:00:00",
+    "Summary": "0 cardio set(s)",
+    "Status": null,
+    "Notes": null,
+    "Difficulty": null
+  },
+  {
+    "Description": "Moderate Run",
+    "Type": "Cardio",
+    "Date": "2025-05-10T00:00:00-05:00",
+    "Summary": "1 cardio set(s)",
+    "Status": "Did not finish",
+    "Notes": "Felt a little sick so I stopped early.",
+    "Difficulty": 8
+  }
+]

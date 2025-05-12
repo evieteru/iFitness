@@ -111,6 +111,7 @@ namespace iFitness
             UpdateGraph(); //Update graph whenever filters/sorts change
         }
 
+        //Graph update on selection change
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             ApplyFiltersAndSort();
@@ -131,6 +132,7 @@ namespace iFitness
             UpdateGraph();
         }
 
+        // Handle the button click to show the graph
         private void UpdateGraph()
         {
             GraphCanvas.Children.Clear(); //Clear previous graph elements

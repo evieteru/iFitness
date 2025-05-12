@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Net.Mail;
 using System.Net;
 
+
 namespace iFitness
 {
     /// <summary>
@@ -365,7 +366,7 @@ namespace iFitness
         //Load the workouts from a JSON file when the application starts
         private void LoadWorkoutsFromJson()
         {
-            string path = "sample_workouts.json"; // Path to the JSON file
+            string path = System.IO.Path.Combine(AppContext.BaseDirectory, "data", "sample_workouts.json"); // Path to the JSON file
             if (!File.Exists(path)) // Check if the file exists
             {
                 // If the file doesn't exist, show a MessageBox
@@ -416,7 +417,7 @@ namespace iFitness
         // Save the workouts to a JSON file when the application closes or when a workout is added/modified
         private void SaveWorkoutsToJson()
         {
-            string path = "sample_workouts.json"; 
+            string path = System.IO.Path.Combine(AppContext.BaseDirectory, "data", "sample_workouts.json");
             try
             {
                 // Convert the dictionary values to a list of Workout objects
